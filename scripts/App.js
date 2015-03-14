@@ -1,28 +1,42 @@
 var React = require('react');
 var Reflux = require('reflux');
+var request = require('superagent');
 
-var store =   Reflux.createStore({
-  data: {message: 0},
-  
+
+var store = Reflux.createStore({
+  data: {people: []},
+
   init() {
-      setInterval(()=>{
-        this.data.message++
-        this.trigger(this.data);
-      }, 2000);
-    },
+    request
+      .get('http://localhost:3000/people.json')
+      .end((err, res) => {
+        this.data.people = res.body;
+        this.trigger(this.data)
+      });
+  },
   getInitialState() {
-      return this.data;
-     },
+    return this.data
+  }
 })
 
 
-var App = 
+var App =  
   React.createClass({
     mixins: [Reflux.connect(store)],
 
     render() {
-      return (<h1>{this.state.message}</h1>);
+      return (
+          <div>{this.state.people.map(person => {
+            return (
+              <div>
+                <h2>{person.name}</h2>
+                <img src={person.avatar} alt="" />
+              </div>
+            )
+          })}</div>
+        )
     }
   });
 
 module.exports = App;
+

@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "react": "^0.13.0",
-    "reflux": "^0.2.7"
+    "reflux": "^0.2.7",
+    "superagent": "^1.0.0"
   }
 }
